@@ -13,23 +13,22 @@ class Widget:
 
 
 class Label(Widget):
-    def __init__(self, text='--') -> None:
-        super().__init__('Label')
+    def __init__(self, text='--', name='Label') -> None:
+        super().__init__(name)
         self.text = text
 
     def __str__(self):
         return self.template % self.text
 
-class Button(Widget):
+class Button(Label):
     def __init__(self, text="--", command=None) -> None:
-        super().__init__('Button')
-        self.text = text
+        super().__init__(text, 'Button')
         self.command = command
 
     def invoke(self):
         self.command()
 
-
+    
 class Container(Widget):
     def __init__(self, name) -> None:
         super().__init__(name)
@@ -42,8 +41,8 @@ class Container(Widget):
 
 
 class Box(Container):
-    def __init__(self, direction=Y) -> None:
-        super().__init__('Box')
+    def __init__(self, direction=Y, name='Box') -> None:
+        super().__init__(name)
         self.direction = direction
 
     def __str__(self) -> str:
@@ -58,7 +57,7 @@ class Box(Container):
 
 class App(Box):
     def __init__(self, title='New Application') -> None:
-        super().__init__()
+        super().__init__(name='App')
         self.title = title
 
     def __str__(self) -> str:
@@ -74,15 +73,19 @@ if __name__ == '__main__':
     lbl1 = Label("AAAAAA AA")
     lbl2 = Label("BBB")
     box1 = Box(direction=X)
-    box1.add(lbl1)
-    box1.add(lbl2)
-    # print(box1)
+    box1.add(lbl1, lbl2)
     lbl3 = Label("SDAAAA AA")
     lbl4 = Label("BBB KKK")
     box2 = Box()
-    box2.add(lbl3)
-    box2.add(lbl4)
-    # print(box2)
+    box2.add(lbl3, lbl4)
     app.add(box1)
     app.add(box2)
+    def change_lbl1():
+        lbl1.text = '1234567'
+    btn1 = Button("press me", change_lbl1)
+    box2.add(btn1)
+
     app.run()
+
+    btn1.invoke()
+    app.make()
